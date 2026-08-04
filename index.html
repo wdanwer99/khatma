@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صدقة جارية — ختمة القرآن الكريم إهداءً لعلي آدم محمد</title>
+<meta name="description" content="ختمة جماعية للقرآن الكريم، الثواب مُهدى إلى المرحوم علي آدم محمد. اختر جزءًا واقرأه من الصفحة.">
+<meta property="og:title" content="ختمة القرآن الكريم — إهداءً لعلي آدم محمد">
+<meta property="og:description" content="شارك في ختمة القرآن: احجز جزءًا واقرأه من الصفحة، والثواب مُهدى للمرحوم علي آدم محمد.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFE9DC; --paper2:#E5DDCB; --ink:#16233A;
+    --ink70:rgba(22,35,58,.62); --ink40:rgba(22,35,58,.32);
+    --verd:#2F6F62; --gold:#A8863C; --line:rgba(22,35,58,.16);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:660px;margin:0 auto;padding:40px 18px 72px}
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold);text-align:center}
+  h1{font-family:'Amiri',serif;font-size:40px;font-weight:700;margin:10px 0 6px;
+     text-align:center;line-height:1.3}
+  .lede{text-align:center;color:var(--ink70);font-size:14px;margin:0 0 26px}
+  .cartouche{border:1px solid var(--line);background:var(--paper2);padding:24px 18px;
+    text-align:center;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--line)}
+  .cartouche .lbl{font-size:11px;letter-spacing:.18em;color:var(--ink40)}
+  .cartouche .nm{font-family:'Amiri',serif;font-size:32px;margin-top:8px;line-height:1.5}
+  .cartouche .duaa{font-family:'Amiri',serif;font-size:16px;color:var(--ink70);margin-top:6px}
+  .tabs{display:flex;margin-top:28px}
+  .tabs button{flex:1;padding:12px 8px;background:none;border:none;border-bottom:2px solid var(--line);
+    color:var(--ink40);font:inherit;font-size:14px;cursor:pointer}
+  .tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink);font-weight:600}
+  .meter{margin:26px 0 18px}
+  .meter .row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;
+    color:var(--ink70);margin-bottom:8px}
+  .meter .pct{color:var(--gold)}
+  .bar{height:3px;background:var(--line)}
+  .bar i{display:block;height:100%;background:var(--verd);width:0;transition:width .5s ease}
+  .tools{display:flex;gap:8px;margin-bottom:14px}
+  input{flex:1;padding:11px 12px;background:transparent;border:1px solid var(--line);
+    color:var(--ink);font:inherit;font-size:14px;border-radius:2px}
+  .ghost{padding:11px 16px;background:transparent;border:1px solid var(--line);
+    color:var(--ink70);font:inherit;font-size:13px;cursor:pointer;border-radius:2px}
+  .hint{font-size:12.5px;color:var(--ink70);margin:0 0 14px}
+  .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+  .grid button{aspect-ratio:1/1;background:transparent;border:1px solid var(--line);
+    border-radius:2px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;padding:2px;transition:background .3s ease;font:inherit}
+  .grid button .n{font-family:'Amiri',serif;font-size:19px;line-height:1}
+  .grid button .who{font-size:8.5px;opacity:.75;max-width:100%;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .grid button.taken{background:var(--paper2)}
+  .grid button.done{background:var(--verd);color:var(--paper);border-color:var(--verd)}
+  .grid button.own{border:2px solid var(--gold)}
+  .foot{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--ink70)}
+  .foot .tiny{font-size:12px;color:var(--ink40);margin-top:6px}
+  .banner{margin-top:20px;padding:18px 16px;background:var(--verd);color:var(--paper);
+    text-align:center;font-family:'Amiri',serif;font-size:20px;line-height:1.8}
+  .linkbtn{margin-top:18px;background:none;border:none;color:var(--ink40);font:inherit;
+    font-size:12px;cursor:pointer;text-decoration:underline}
+  .note{margin-top:16px;padding:10px 12px;border:1px solid var(--gold);font-size:13px}
+  .verse{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);text-align:center;
+    font-family:'Amiri',serif;font-size:17px;color:var(--ink70)}
+  /* sheet */
+  .scrim{position:fixed;inset:0;background:rgba(22,35,58,.45);display:none;z-index:20}
+  .scrim.on{display:block}
+  .sheet{position:fixed;inset-inline:0;bottom:0;max-height:92vh;background:var(--paper);
+    border-top:1px solid var(--line);display:none;flex-direction:column;z-index:21}
+  .sheet.on{display:flex}
+  .sheet header{display:flex;justify-content:space-between;align-items:center;
+    padding:14px 18px;border-bottom:1px solid var(--line)}
+  .sheet header h2{font-family:'Amiri',serif;font-size:22px;margin:0;font-weight:400}
+  .sheet .body{overflow:auto;padding:18px}
+  .acts{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 16px}
+  .acts button{padding:11px 16px;font:inherit;font-size:14px;cursor:pointer;border-radius:2px}
+  .solid{background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+  .outline{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .surah{font-family:'Amiri',serif;font-size:19px;text-align:center;color:var(--gold);
+    margin:26px 0 10px;padding:6px 0;border-block:1px solid var(--line)}
+  .ayat{font-family:'Amiri',serif;font-size:25px;line-height:2.35;text-align:justify}
+  .ayah.resume-mark{background:rgba(168,134,60,.28);border-radius:3px}
+  .num{font-size:15px;color:var(--gold);padding:0 4px}
+  .reading{max-width:640px;margin:0 auto}
+  @media (max-width:420px){ h1{font-size:32px} .grid{grid-template-columns:repeat(5,1fr)} .ayat{font-size:22px} }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">صــدقــة جــاريــة</div>
+  <h1>ختمة القرآن الكريم</h1>
+  <p class="lede">ثلاثون جزءًا تُقسَّم بين المشاركين، تُقرأ من هذه الصفحة.</p>
+
+  <div class="cartouche">
+    <div class="lbl">الثواب مُهدى إلى</div>
+    <div class="nm">المرحوم علي آدم محمد</div>
+    <div class="duaa">اللهم اغفر له وارحمه وأنزله منازل الصدّيقين</div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-group" aria-selected="true">ختمة جماعية</button>
+    <button role="tab" id="tab-mine" aria-selected="false">ختمتي الخاصة</button>
+  </div>
+
+  <div class="meter">
+    <div class="row"><span id="count"></span><span class="pct" id="pct"></span></div>
+    <div class="bar"><i id="fill"></i></div>
+  </div>
+
+  <div id="grouptools">
+    <div class="tools">
+      <input id="reader" placeholder="اسمك" autocomplete="name">
+      <button class="ghost" id="refresh">تحديث</button>
+    </div>
+    <p class="hint">اضغط أي جزء لتحجزه أو تقرأه. الأجزاء ذات الإطار الذهبي هي أجزاؤك.</p>
+  </div>
+  <p class="hint" id="minehint" hidden>ختمتك الخاصة محفوظة على جهازك وحدك، لا يراها أحد غيرك.</p>
+  <div class="tools" id="continueRow" hidden>
+    <button class="ghost" id="continueBtn" style="flex:1"></button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div id="note" class="note" hidden></div>
+
+  <div class="foot" id="foot"></div>
+  <div class="banner" id="banner" hidden></div>
+  <button class="linkbtn" id="reset"></button>
+
+  <p class="verse">«إذا مات الإنسان انقطع عمله إلا من ثلاث… أو ولد صالح يدعو له»</p>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" aria-modal="true" role="dialog">
+  <header>
+    <h2 id="sheetTitle"></h2>
+    <button class="ghost" id="close">إغلاق</button>
+  </header>
+  <div class="acts" id="acts"></div>
+  <div class="body"><div class="reading" id="reading"></div></div>
+</section>
+
+<script>
+/* ── إعداد المشاركة ────────────────────────────────────────
+   لتصبح الختمة الجماعية مشتركة بين كل الزوار، املأ القيمتين
+   أدناه من مشروع Supabase مجاني. إذا تركتهما فارغتين تعمل
+   الصفحة بالحفظ المحلي فقط (كل زائر يرى نسخته).            */
+const SUPA = { url:"https://kcpsgqtxqvarkkkabrys.supabase.co", key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcHNncXR4cXZhcmtra2FicnlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3ODI0OTksImV4cCI6MjEwMTM1ODQ5OX0.YVIKlzZmN1czIv09X5SC73N-2GdvqQbgAX9DnSMkkQA" };
+const TABLE = "khatma", ROW = "ali-adam-mohamed";
+/* ─────────────────────────────────────────────────────────*/
+
+const AR="٠١٢٣٤٥٦٧٨٩";
+const toAr = n => String(n).replace(/\d/g, d => AR[d]);
+const $ = s => document.querySelector(s);
+
+let tab="group", group={juz:{}}, mine={done:[],pos:{},last:null}, groupRead={pos:{},last:null}, reader="", open=null;
+let readingCtx=null, posAyahs=[], posScroller=null, posJuz=null, posTimer=null;
+
+/* التخزين */
+const local = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } },
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
+};
+const shared = {
+  on: () => SUPA.url && SUPA.key,
+  head: () => ({ apikey:SUPA.key, Authorization:"Bearer "+SUPA.key, "Content-Type":"application/json" }),
+  async get(){
+    const r = await fetch(`${SUPA.url}/rest/v1/${TABLE}?id=eq.${ROW}&select=data`, {headers:this.head()});
+    if(!r.ok) throw 0;
+    const rows = await r.json();
+    return rows[0]?.data || {juz:{}};
+  },
+  async set(data){
+    const r = await fetch(`${SUPA.url}/rest/v1/${TABLE}`, {
+      method:"POST",
+      headers:{...this.head(), Prefer:"resolution=merge-duplicates"},
+      body: JSON.stringify({id:ROW, data})
+    });
+    if(!r.ok) throw 0;
+  }
+};
+
+async function loadGroup(){
+  if(shared.on()){ try { return await shared.get() } catch { say("تعذّر جلب الختمة المشتركة. تحقق من الاتصال."); } }
+  return local.get("khatma:group") || {juz:{}};
+}
+async function saveGroup(next){
+  group = next; render();
+  if(shared.on()){ try { await shared.set(next) } catch { say("تعذّر الحفظ. حاول مرة أخرى."); return } }
+  local.set("khatma:group", next);
+}
+function saveMine(next){ mine=next; local.set("khatma:mine",next); render(); }
+function say(m){ const n=$("#note"); n.hidden=!m; n.textContent=m||""; }
+
+/* الشبكة */
+function render(){
+  const g=$("#grid"); g.innerHTML="";
+  const isG = tab==="group";
+  for(let n=1;n<=30;n++){
+    const b=document.createElement("button");
+    const e = isG ? group.juz[n] : null;
+    const on = isG ? false : mine.done.includes(n);
+    const started = !isG && !on && mine.pos[n];
+    b.className = isG
+      ? (e?(e.done?"done":"taken"):"") + (e && e.name===reader.trim() ? " own":"")
+      : (on?"done":(started?"taken":""));
+    b.innerHTML = `<span class="n">${toAr(n)}</span>` + (e?`<span class="who">${esc(e.name)}</span>`:"");
+    b.onclick = () => openSheet(n);
+    g.appendChild(b);
+  }
+  const done = isG ? Object.values(group.juz).filter(j=>j.done).length : mine.done.length;
+  const pct = Math.round(done/30*100);
+  $("#count").textContent = `${toAr(done)} من ٣٠ جزءًا خُتمت`;
+  $("#pct").textContent = toAr(pct)+"٪";
+  $("#fill").style.width = pct+"%";
+
+  const claimed = Object.keys(group.juz).length;
+  const people = [...new Set(Object.values(group.juz).map(j=>j.name))];
+  $("#foot").innerHTML = isG
+    ? `<div>محجوز: ${toAr(claimed)} — متبقٍ: ${toAr(30-claimed)}</div>`
+      + (people.length?`<div>المشاركون: ${esc(people.join("، "))}</div>`:"")
+      + `<div class="tiny">${shared.on()?"الختمة الجماعية والأسماء فيها يراها كل من يفتح الصفحة.":"الحفظ محلي حاليًا — راجع تعليقات الكود لتفعيل المشاركة."}</div>`
+    : "";
+  $("#banner").hidden = done<30;
+  $("#banner").textContent = "تمّت الختمة بحمد الله — اللهم اجعل ثوابها للمرحوم علي آدم محمد";
+  $("#reset").hidden = isG;
+  $("#reset").textContent = "بدء ختمة جديدة لي";
+  $("#grouptools").hidden = !isG;
+  $("#minehint").hidden = isG;
+
+  const cr=$("#continueRow");
+  const lastInfo = isG ? groupRead.last : mine.last;
+  const lastJuzDone = lastInfo && (isG ? !!(group.juz[lastInfo.juz] && group.juz[lastInfo.juz].done) : mine.done.includes(lastInfo.juz));
+  if(lastInfo && !lastJuzDone){
+    cr.hidden=false;
+    $("#continueBtn").textContent = `تابع القراءة — الجزء ${toAr(lastInfo.juz)}، من الآية ${toAr(lastInfo.idx+1)} من ${toAr(lastInfo.total)}`;
+  } else cr.hidden=true;
+}
+const esc = s => String(s).replace(/[<>&"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+
+/* اللوحة */
+function openSheet(n){
+  open=n;
+  readingCtx=tab;
+  $("#sheetTitle").textContent = `الجزء ${toAr(n)}`;
+  const acts=$("#acts"); acts.innerHTML="";
+  const add=(label,cls,fn)=>{const b=document.createElement("button");b.textContent=label;b.className=cls;b.onclick=fn;acts.appendChild(b)};
+
+  if(tab==="group"){
+    const e=group.juz[n];
+    const p=groupRead.pos[n];
+    let status = e?`محجوز باسم ${esc(e.name)}${e.done?" — وقد خُتم":""}.`:"هذا الجزء متاح.";
+    if(p && !(e&&e.done)) status += ` وصلت أنت إلى الآية ${toAr(p.idx+1)} من ${toAr(p.total)}.`;
+    $("#reading").innerHTML = `<p class="hint">${status}</p>`;
+    if(p && !(e&&e.done)) add("تابع من حيث توقفت","solid",()=>readJuz(n,p.idx));
+    add(p&&!(e&&e.done)?"ابدأ من جديد":"ابدأ القراءة", p&&!(e&&e.done)?"outline":"solid", ()=>restartGroup(n));
+    if(!e) add("احجزه باسمي","outline",()=>claim(n));
+    else if(e.name===reader.trim()){
+      if(!e.done) add("تم — خُتم الجزء","outline",()=>mark(n,true));
+      else add("تراجع عن الختم","outline",()=>mark(n,false));
+      add("إلغاء الحجز","outline",()=>release(n));
+    }
+  } else {
+    const done = mine.done.includes(n);
+    const p = mine.pos[n];
+    $("#reading").innerHTML = `<p class="hint">${done?"أتممت قراءة هذا الجزء، بارك الله فيك.":(p?`آخر موضع لك: الآية ${toAr(p.idx+1)} من ${toAr(p.total)}.`:"لم تبدأ قراءة هذا الجزء بعد.")}</p>`;
+    if(p && !done) add("تابع من حيث توقفت","solid",()=>readJuz(n,p.idx));
+    add(p&&!done?"ابدأ من جديد":"ابدأ القراءة", p&&!done?"outline":"solid", ()=>restartMine(n));
+    add(done?"تراجع عن القراءة":"تحديد كمقروء","outline",()=>toggleMineDone(n));
+  }
+
+  $("#scrim").classList.add("on"); $("#sheet").classList.add("on");
+}
+function closeSheet(){
+  capturePos();
+  open=null; readingCtx=null; posAyahs=[]; posScroller=null; posJuz=null; clearTimeout(posTimer);
+  $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on");
+}
+function restartMine(n){
+  const p={...mine.pos}; delete p[n];
+  const last = mine.last && mine.last.juz===n ? null : mine.last;
+  saveMine({...mine, pos:p, last});
+  readJuz(n,0);
+}
+function restartGroup(n){
+  const p={...groupRead.pos}; delete p[n];
+  const last = groupRead.last && groupRead.last.juz===n ? null : groupRead.last;
+  groupRead = {...groupRead, pos:p, last};
+  local.set("khatma:groupread", groupRead);
+  readJuz(n,0);
+}
+function toggleMineDone(n){
+  const willDone = !mine.done.includes(n);
+  const arr = willDone ? [...mine.done,n] : mine.done.filter(x=>x!==n);
+  let next = {...mine, done:arr};
+  if(willDone){
+    const p={...next.pos}; delete p[n];
+    next = {...next, pos:p, last: next.last && next.last.juz===n ? null : next.last};
+  }
+  saveMine(next);
+  openSheet(n);
+}
+function capturePos(){
+  if((readingCtx!=="mine" && readingCtx!=="group") || posJuz==null || !posScroller || !posAyahs.length) return;
+  const top = posScroller.getBoundingClientRect().top;
+  let idx=0;
+  for(const el of posAyahs){ if(el.getBoundingClientRect().top - top > 40) break; idx = Number(el.dataset.idx); }
+  const total = posAyahs.length;
+  if(readingCtx==="mine"){
+    mine = {...mine, pos:{...mine.pos,[posJuz]:{idx,total}}, last:{juz:posJuz, idx, total, ts:Date.now()}};
+    local.set("khatma:mine", mine);
+  } else {
+    groupRead = {...groupRead, pos:{...groupRead.pos,[posJuz]:{idx,total}}, last:{juz:posJuz, idx, total, ts:Date.now()}};
+    local.set("khatma:groupread", groupRead);
+  }
+}
+
+async function claim(n){
+  if(!reader.trim()){ closeSheet(); say("اكتب اسمك أولًا حتى تحجز جزءًا."); return }
+  const fresh = await loadGroup();
+  if(fresh.juz[n]){ closeSheet(); say(`سبقك ${fresh.juz[n].name} إلى هذا الجزء.`); group=fresh; render(); return }
+  fresh.juz[n]={name:reader.trim(),done:false};
+  say(""); await saveGroup(fresh); openSheet(n);
+}
+async function mark(n,done){
+  const fresh = await loadGroup();
+  if(fresh.juz[n]) fresh.juz[n].done=done;
+  await saveGroup(fresh);
+  if(done){
+    const p={...groupRead.pos}; delete p[n];
+    const last = groupRead.last && groupRead.last.juz===n ? null : groupRead.last;
+    groupRead = {...groupRead, pos:p, last};
+    local.set("khatma:groupread", groupRead);
+  }
+  openSheet(n);
+}
+async function release(n){
+  const fresh = await loadGroup();
+  delete fresh.juz[n];
+  await saveGroup(fresh); openSheet(n);
+}
+
+/* القراءة */
+const cache={};
+async function readJuz(n, resumeIdx){
+  const box=$("#reading");
+  if(cache[n]){ box.innerHTML=cache[n]; afterRead(n, resumeIdx); return }
+  box.innerHTML=`<p class="hint">جارٍ تحميل الجزء ${toAr(n)}…</p>`;
+  try{
+    const r = await fetch(`https://api.alquran.cloud/v1/juz/${n}/quran-uthmani`);
+    const d = await r.json();
+    let html="", last=null, i=0;
+    for(const a of d.data.ayahs){
+      if(a.surah.number!==last){
+        last=a.surah.number;
+        html += `<div class="surah">${esc(a.surah.name)}</div><p class="ayat">`;
+      }
+      html += `<span class="ayah" data-idx="${i}">${a.text} <span class="num">﴿${toAr(a.numberInSurah)}﴾</span></span> `;
+      i++;
+    }
+    html += "</p>";
+    cache[n]=html; box.innerHTML=html; afterRead(n, resumeIdx);
+  }catch{
+    box.innerHTML = `<p class="hint">تعذّر تحميل النص. افتح الجزء من
+      <a href="https://quran.com/juz/${n}" target="_blank" rel="noopener">quran.com</a> وتابع القراءة هناك.</p>`;
+  }
+}
+function afterRead(n, resumeIdx){
+  const box=$("#reading"), scroller=box.parentElement;
+  scroller.scrollTop=0;
+  if(readingCtx==="mine" || readingCtx==="group"){
+    posJuz=n; posScroller=scroller; posAyahs=[...box.querySelectorAll(".ayah")];
+    scroller.onscroll = () => { clearTimeout(posTimer); posTimer=setTimeout(capturePos,400); };
+  } else {
+    posJuz=null; posScroller=null; posAyahs=[]; scroller.onscroll=null;
+  }
+  if(typeof resumeIdx==="number" && resumeIdx>0){
+    requestAnimationFrame(()=>{
+      const target=box.querySelector(`[data-idx="${resumeIdx}"]`);
+      if(target){
+        target.scrollIntoView({block:"start"});
+        target.classList.add("resume-mark");
+        setTimeout(()=>target.classList.remove("resume-mark"),2000);
+      }
+    });
+  }
+}
+
+/* التشغيل */
+$("#tab-group").onclick=()=>{tab="group";$("#tab-group").ariaSelected="true";$("#tab-mine").ariaSelected="false";render()};
+$("#tab-mine").onclick=()=>{tab="mine";$("#tab-mine").ariaSelected="true";$("#tab-group").ariaSelected="false";render()};
+$("#close").onclick=closeSheet; $("#scrim").onclick=closeSheet;
+$("#refresh").onclick=async()=>{ group=await loadGroup(); render(); };
+$("#reader").oninput=e=>{ reader=e.target.value; localStorage.setItem("khatma:name",reader); render(); };
+$("#continueBtn").onclick=()=>{
+  const info = tab==="group" ? groupRead.last : mine.last;
+  if(!info) return;
+  openSheet(info.juz); readJuz(info.juz, info.idx);
+};
+$("#reset").onclick=()=>{ if(confirm("بدء ختمة جديدة لك؟")) saveMine({done:[],pos:{},last:null}); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+
+(async()=>{
+  reader = localStorage.getItem("khatma:name") || "";
+  $("#reader").value = reader;
+  mine = {done:[],pos:{},last:null, ...(local.get("khatma:mine")||{})};
+  groupRead = {pos:{},last:null, ...(local.get("khatma:groupread")||{})};
+  group = await loadGroup();
+  render();
+  setInterval(async()=>{ if(tab==="group" && !open){ group=await loadGroup(); render(); } }, 30000);
+})();
+</script>
+</body>
+</html>
