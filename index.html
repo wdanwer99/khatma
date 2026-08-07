@@ -56,6 +56,16 @@
   .grid button.taken{background:var(--paper2)}
   .grid button.done{background:var(--verd);color:var(--paper);border-color:var(--verd)}
   .grid button.own{border:2px solid var(--gold)}
+  .roundTabs{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0}
+  .roundTabs button{white-space:nowrap;padding:8px 12px;border:1px solid var(--line);
+    background:transparent;color:var(--ink70);font:inherit;font-size:12.5px;cursor:pointer;border-radius:20px}
+  .roundTabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .roundTabs button.full{border-color:var(--verd);color:var(--verd)}
+  .roundTabs button[aria-selected="true"].full{background:var(--verd);border-color:var(--verd);color:var(--paper)}
+  .ghost:disabled{opacity:.4;cursor:not-allowed}
+  .completedItem{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--ink70)}
+  .completedItem:last-child{border-bottom:none}
+  .completedItem b{color:var(--ink);font-weight:600}
   .foot{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);
     font-size:13px;color:var(--ink70)}
   .foot .tiny{font-size:12px;color:var(--ink40);margin-top:6px}
@@ -115,6 +125,10 @@
 
   <div id="grouptools">
     <div class="tools">
+      <div class="roundTabs" id="roundTabs" role="tablist"></div>
+      <button class="ghost" id="addRound" type="button">+ ختمة جديدة</button>
+    </div>
+    <div class="tools">
       <input id="reader" placeholder="اسمك" autocomplete="name">
       <button class="ghost" id="refresh">تحديث</button>
     </div>
@@ -130,6 +144,10 @@
   <div id="note" class="note" hidden></div>
 
   <div class="foot" id="foot"></div>
+  <div class="foot" id="completedWrap" hidden>
+    <div class="tiny" style="margin-bottom:8px">ختمات جماعية مكتملة</div>
+    <div id="completedListEl"></div>
+  </div>
   <div class="banner" id="banner" hidden></div>
   <button class="linkbtn" id="reset"></button>
 
@@ -158,9 +176,11 @@ const TABLE = "khatma", ROW = "ali-adam-mohamed";
 const AR="٠١٢٣٤٥٦٧٨٩";
 const toAr = n => String(n).replace(/\d/g, d => AR[d]);
 const $ = s => document.querySelector(s);
+const keyFor = (r,n) => `${r}:${n}`;
 
-let tab="group", group={juz:{}}, mine={done:[],pos:{},last:null}, groupRead={pos:{},last:null}, reader="", open=null;
-let readingCtx=null, posAyahs=[], posScroller=null, posJuz=null, posTimer=null;
+let tab="group", group={nextId:2,rounds:[{id:1,juz:{}}],completed:[]}, round=1;
+let mine={done:[],pos:{},last:null}, groupRead={pos:{},last:null}, reader="", open=null;
+let readingCtx=null, posAyahs=[], posScroller=null, posJuz=null, posRound=null, posTimer=null;
 
 /* التخزين */
 const local = {
@@ -174,7 +194,7 @@ const shared = {
     const r = await fetch(`${SUPA.url}/rest/v1/${TABLE}?id=eq.${ROW}&select=data`, {headers:this.head()});
     if(!r.ok) throw 0;
     const rows = await r.json();
-    return rows[0]?.data || {juz:{}};
+    return rows[0]?.data || null;
   },
   async set(data){
     const r = await fetch(`${SUPA.url}/rest/v1/${TABLE}`, {
@@ -186,9 +206,19 @@ const shared = {
   }
 };
 
+/* بيانات النسخة القديمة كانت {juz:{...}} لختمة واحدة فقط؛ حوّلها إلى بنية الختمات المتعددة */
+function migrate(data){
+  if(data && Array.isArray(data.rounds)){
+    const ids = [...data.rounds.map(r=>r.id||0), ...(data.completed||[]).map(r=>r.id||0)];
+    const nextId = data.nextId || Math.max(0,...ids)+1;
+    return {nextId, rounds:data.rounds.length?data.rounds:[{id:nextId,juz:{}}], completed:data.completed||[]};
+  }
+  if(data && data.juz) return {nextId:2, rounds:[{id:1,juz:data.juz}], completed:[]};
+  return {nextId:2, rounds:[{id:1,juz:{}}], completed:[]};
+}
 async function loadGroup(){
-  if(shared.on()){ try { return await shared.get() } catch { say("تعذّر جلب الختمة المشتركة. تحقق من الاتصال."); } }
-  return local.get("khatma:group") || {juz:{}};
+  if(shared.on()){ try { return migrate(await shared.get()) } catch { say("تعذّر جلب الختمة المشتركة. تحقق من الاتصال."); } }
+  return migrate(local.get("khatma:group"));
 }
 async function saveGroup(next){
   group = next; render();
@@ -197,14 +227,19 @@ async function saveGroup(next){
 }
 function saveMine(next){ mine=next; local.set("khatma:mine",next); render(); }
 function say(m){ const n=$("#note"); n.hidden=!m; n.textContent=m||""; }
+function findRound(id){ return group.rounds.find(r=>r.id===id); }
+function currentRoundJuz(){ const rd=findRound(round); return (rd&&rd.juz)||{}; }
+function isRoundFull(rd){ return !!rd && Object.keys(rd.juz).length>=30; }
+function ensureRound(){ if(!findRound(round) && group.rounds.length) round = group.rounds[group.rounds.length-1].id; }
 
 /* الشبكة */
 function render(){
   const g=$("#grid"); g.innerHTML="";
   const isG = tab==="group";
+  const rJuz = isG ? currentRoundJuz() : null;
   for(let n=1;n<=30;n++){
     const b=document.createElement("button");
-    const e = isG ? group.juz[n] : null;
+    const e = isG ? rJuz[n] : null;
     const on = isG ? false : mine.done.includes(n);
     const started = !isG && !on && mine.pos[n];
     b.className = isG
@@ -214,14 +249,14 @@ function render(){
     b.onclick = () => openSheet(n);
     g.appendChild(b);
   }
-  const done = isG ? Object.values(group.juz).filter(j=>j.done).length : mine.done.length;
+  const done = isG ? Object.values(rJuz).filter(j=>j.done).length : mine.done.length;
   const pct = Math.round(done/30*100);
   $("#count").textContent = `${toAr(done)} من ٣٠ جزءًا خُتمت`;
   $("#pct").textContent = toAr(pct)+"٪";
   $("#fill").style.width = pct+"%";
 
-  const claimed = Object.keys(group.juz).length;
-  const people = [...new Set(Object.values(group.juz).map(j=>j.name))];
+  const claimed = isG ? Object.keys(rJuz).length : 0;
+  const people = isG ? [...new Set(Object.values(rJuz).map(j=>j.name))] : [];
   $("#foot").innerHTML = isG
     ? `<div>محجوز: ${toAr(claimed)} — متبقٍ: ${toAr(30-claimed)}</div>`
       + (people.length?`<div>المشاركون: ${esc(people.join("، "))}</div>`:"")
@@ -234,13 +269,46 @@ function render(){
   $("#grouptools").hidden = !isG;
   $("#minehint").hidden = isG;
 
+  if(isG) renderRounds();
+  renderCompleted();
+
   const cr=$("#continueRow");
   const lastInfo = isG ? groupRead.last : mine.last;
-  const lastJuzDone = lastInfo && (isG ? !!(group.juz[lastInfo.juz] && group.juz[lastInfo.juz].done) : mine.done.includes(lastInfo.juz));
+  const lastJuzDone = lastInfo && (isG
+    ? (()=>{ const rd=findRound(lastInfo.round); return !rd || !!(rd.juz[lastInfo.juz] && rd.juz[lastInfo.juz].done); })()
+    : mine.done.includes(lastInfo.juz));
   if(lastInfo && !lastJuzDone){
     cr.hidden=false;
-    $("#continueBtn").textContent = `تابع القراءة — الجزء ${toAr(lastInfo.juz)}، من الآية ${toAr(lastInfo.idx+1)} من ${toAr(lastInfo.total)}`;
+    const roundLabel = isG && group.rounds.length>1 ? `ختمة ${toAr(group.rounds.findIndex(r=>r.id===lastInfo.round)+1)} — ` : "";
+    $("#continueBtn").textContent = `تابع القراءة — ${roundLabel}الجزء ${toAr(lastInfo.juz)}، من الآية ${toAr(lastInfo.idx+1)} من ${toAr(lastInfo.total)}`;
   } else cr.hidden=true;
+}
+function renderRounds(){
+  const rt=$("#roundTabs"); rt.innerHTML="";
+  group.rounds.forEach((rd,i)=>{
+    const full = isRoundFull(rd);
+    const b=document.createElement("button");
+    b.type="button"; b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", rd.id===round?"true":"false");
+    b.className = full?"full":"";
+    b.textContent = (i===0?"الختمة الرئيسية":`ختمة ${toAr(i+1)}`) + (full?" ✓":"");
+    b.onclick = ()=>{ round=rd.id; render(); };
+    rt.appendChild(b);
+  });
+  const addBtn=$("#addRound");
+  const lastFull = isRoundFull(group.rounds[group.rounds.length-1]);
+  addBtn.disabled = !lastFull;
+  addBtn.title = lastFull ? "ابدأ ختمة جماعية جديدة" : "أكمل حجز كل أجزاء الختمة الحالية أولًا لتتمكن من بدء ختمة جديدة";
+}
+function renderCompleted(){
+  const wrap=$("#completedWrap"), list=$("#completedListEl");
+  const items = tab==="group" ? (group.completed||[]) : [];
+  wrap.hidden = items.length===0;
+  list.innerHTML = items.map((c,i)=>{
+    const people = c.people && c.people.length ? esc(c.people.join("، ")) : "";
+    const date = c.completedAt ? new Date(c.completedAt).toLocaleDateString("ar-EG",{day:"numeric",month:"long",year:"numeric"}) : "";
+    return `<div class="completedItem"><b>ختمة مكتملة رقم ${toAr(i+1)}</b>${date?` — ${date}`:""}${people?`<br>شارك فيها: ${people}`:""}</div>`;
+  }).join("");
 }
 const esc = s => String(s).replace(/[<>&"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
 
@@ -253,8 +321,9 @@ function openSheet(n){
   const add=(label,cls,fn)=>{const b=document.createElement("button");b.textContent=label;b.className=cls;b.onclick=fn;acts.appendChild(b)};
 
   if(tab==="group"){
-    const e=group.juz[n];
-    const p=groupRead.pos[n];
+    const rJuz=currentRoundJuz();
+    const e=rJuz[n];
+    const p=groupRead.pos[keyFor(round,n)];
     let status = e?`محجوز باسم ${esc(e.name)}${e.done?" — وقد خُتم":""}.`:"هذا الجزء متاح.";
     if(p && !(e&&e.done)) status += ` وصلت أنت إلى الآية ${toAr(p.idx+1)} من ${toAr(p.total)}.`;
     $("#reading").innerHTML = `<p class="hint">${status}</p>`;
@@ -279,7 +348,7 @@ function openSheet(n){
 }
 function closeSheet(){
   capturePos();
-  open=null; readingCtx=null; posAyahs=[]; posScroller=null; posJuz=null; clearTimeout(posTimer);
+  open=null; readingCtx=null; posAyahs=[]; posScroller=null; posJuz=null; posRound=null; clearTimeout(posTimer);
   $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on");
 }
 function restartMine(n){
@@ -289,8 +358,9 @@ function restartMine(n){
   readJuz(n,0);
 }
 function restartGroup(n){
-  const p={...groupRead.pos}; delete p[n];
-  const last = groupRead.last && groupRead.last.juz===n ? null : groupRead.last;
+  const key=keyFor(round,n);
+  const p={...groupRead.pos}; delete p[key];
+  const last = groupRead.last && groupRead.last.round===round && groupRead.last.juz===n ? null : groupRead.last;
   groupRead = {...groupRead, pos:p, last};
   local.set("khatma:groupread", groupRead);
   readJuz(n,0);
@@ -316,7 +386,8 @@ function capturePos(){
     mine = {...mine, pos:{...mine.pos,[posJuz]:{idx,total}}, last:{juz:posJuz, idx, total, ts:Date.now()}};
     local.set("khatma:mine", mine);
   } else {
-    groupRead = {...groupRead, pos:{...groupRead.pos,[posJuz]:{idx,total}}, last:{juz:posJuz, idx, total, ts:Date.now()}};
+    const key=keyFor(posRound,posJuz);
+    groupRead = {...groupRead, pos:{...groupRead.pos,[key]:{idx,total}}, last:{round:posRound, juz:posJuz, idx, total, ts:Date.now()}};
     local.set("khatma:groupread", groupRead);
   }
 }
@@ -324,26 +395,52 @@ function capturePos(){
 async function claim(n){
   if(!reader.trim()){ closeSheet(); say("اكتب اسمك أولًا حتى تحجز جزءًا."); return }
   const fresh = await loadGroup();
-  if(fresh.juz[n]){ closeSheet(); say(`سبقك ${fresh.juz[n].name} إلى هذا الجزء.`); group=fresh; render(); return }
-  fresh.juz[n]={name:reader.trim(),done:false};
+  const rd = findRoundIn(fresh, round);
+  if(!rd){ group=fresh; ensureRound(); render(); return }
+  if(rd.juz[n]){ closeSheet(); say(`سبقك ${rd.juz[n].name} إلى هذا الجزء.`); group=fresh; render(); return }
+  rd.juz[n]={name:reader.trim(),done:false};
   say(""); await saveGroup(fresh); openSheet(n);
 }
 async function mark(n,done){
   const fresh = await loadGroup();
-  if(fresh.juz[n]) fresh.juz[n].done=done;
+  const rd = findRoundIn(fresh, round);
+  if(rd && rd.juz[n]) rd.juz[n].done=done;
+  let archived=false;
+  if(done && rd && isRoundFull(rd) && Object.values(rd.juz).every(j=>j.done)){
+    const people=[...new Set(Object.values(rd.juz).map(j=>j.name))];
+    fresh.completed=[...(fresh.completed||[]), {id:rd.id, juz:rd.juz, people, completedAt:Date.now()}];
+    fresh.rounds = fresh.rounds.filter(r=>r.id!==rd.id);
+    if(fresh.rounds.length===0){ const id=fresh.nextId++; fresh.rounds.push({id,juz:{}}); round=id; }
+    else round = fresh.rounds[fresh.rounds.length-1].id;
+    archived=true;
+  }
   await saveGroup(fresh);
-  if(done){
-    const p={...groupRead.pos}; delete p[n];
-    const last = groupRead.last && groupRead.last.juz===n ? null : groupRead.last;
+  if(done && !archived){
+    const key=keyFor(round,n);
+    const p={...groupRead.pos}; delete p[key];
+    const last = groupRead.last && groupRead.last.round===round && groupRead.last.juz===n ? null : groupRead.last;
     groupRead = {...groupRead, pos:p, last};
     local.set("khatma:groupread", groupRead);
   }
-  openSheet(n);
+  if(archived){ closeSheet(); say("تهانينا — اكتملت هذه الختمة الجماعية بحمد الله، وحُفظت ضمن الختمات المكتملة."); }
+  else openSheet(n);
 }
 async function release(n){
   const fresh = await loadGroup();
-  delete fresh.juz[n];
+  const rd = findRoundIn(fresh, round);
+  if(rd) delete rd.juz[n];
   await saveGroup(fresh); openSheet(n);
+}
+function findRoundIn(data,id){ return data.rounds.find(r=>r.id===id); }
+async function addRound(){
+  const fresh = await loadGroup();
+  const last = fresh.rounds[fresh.rounds.length-1];
+  if(!isRoundFull(last)){ group=fresh; round=last.id; render(); say("لا يمكن بدء ختمة جديدة قبل اكتمال حجز جميع أجزاء الختمة الحالية."); return; }
+  const id = fresh.nextId++;
+  fresh.rounds.push({id, juz:{}});
+  round = id;
+  say("");
+  await saveGroup(fresh);
 }
 
 /* القراءة */
@@ -375,10 +472,10 @@ function afterRead(n, resumeIdx){
   const box=$("#reading"), scroller=box.parentElement;
   scroller.scrollTop=0;
   if(readingCtx==="mine" || readingCtx==="group"){
-    posJuz=n; posScroller=scroller; posAyahs=[...box.querySelectorAll(".ayah")];
+    posJuz=n; posRound=readingCtx==="group"?round:null; posScroller=scroller; posAyahs=[...box.querySelectorAll(".ayah")];
     scroller.onscroll = () => { clearTimeout(posTimer); posTimer=setTimeout(capturePos,400); };
   } else {
-    posJuz=null; posScroller=null; posAyahs=[]; scroller.onscroll=null;
+    posJuz=null; posRound=null; posScroller=null; posAyahs=[]; scroller.onscroll=null;
   }
   if(typeof resumeIdx==="number" && resumeIdx>0){
     requestAnimationFrame(()=>{
@@ -396,11 +493,13 @@ function afterRead(n, resumeIdx){
 $("#tab-group").onclick=()=>{tab="group";$("#tab-group").ariaSelected="true";$("#tab-mine").ariaSelected="false";render()};
 $("#tab-mine").onclick=()=>{tab="mine";$("#tab-mine").ariaSelected="true";$("#tab-group").ariaSelected="false";render()};
 $("#close").onclick=closeSheet; $("#scrim").onclick=closeSheet;
-$("#refresh").onclick=async()=>{ group=await loadGroup(); render(); };
+$("#refresh").onclick=async()=>{ group=await loadGroup(); ensureRound(); render(); };
+$("#addRound").onclick=addRound;
 $("#reader").oninput=e=>{ reader=e.target.value; localStorage.setItem("khatma:name",reader); render(); };
 $("#continueBtn").onclick=()=>{
   const info = tab==="group" ? groupRead.last : mine.last;
   if(!info) return;
+  if(tab==="group" && findRound(info.round)) round = info.round;
   openSheet(info.juz); readJuz(info.juz, info.idx);
 };
 $("#reset").onclick=()=>{ if(confirm("بدء ختمة جديدة لك؟")) saveMine({done:[],pos:{},last:null}); };
@@ -412,8 +511,9 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
   mine = {done:[],pos:{},last:null, ...(local.get("khatma:mine")||{})};
   groupRead = {pos:{},last:null, ...(local.get("khatma:groupread")||{})};
   group = await loadGroup();
+  round = group.rounds[group.rounds.length-1].id;
   render();
-  setInterval(async()=>{ if(tab==="group" && !open){ group=await loadGroup(); render(); } }, 30000);
+  setInterval(async()=>{ if(tab==="group" && !open){ group=await loadGroup(); ensureRound(); render(); } }, 30000);
 })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
